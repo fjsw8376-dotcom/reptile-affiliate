@@ -22,10 +22,23 @@ def load_json(path: Path):
     return json.loads(path.read_text(encoding="utf-8"))
 
 
+def is_valid_article(article: dict) -> bool:
+    return (
+        isinstance(article.get("sections"), list)
+        and all(isinstance(s, dict) and "heading" in s and "html" in s for s in article["sections"])
+        and isinstance(article.get("faq"), list)
+        and all(isinstance(f, dict) and "q" in f and "a" in f for f in article["faq"])
+    )
+
+
 def load_articles() -> list[dict]:
     articles = []
     for path in sorted(ARTICLES_DIR.glob("*.json")):
-        articles.append(load_json(path))
+        article = load_json(path)
+        if not is_valid_article(article):
+            print(f"警告: {path.name} の形式が不正なためスキップします")
+            continue
+        articles.append(article)
     articles.sort(key=lambda a: a["published_date"], reverse=True)
     return articles
 

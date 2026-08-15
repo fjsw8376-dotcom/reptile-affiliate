@@ -35,6 +35,7 @@ SYSTEM_PROMPT = """あなたは日本の爬虫類飼育情報サイトの専属�
 ARTICLE_TOOL = {
     "name": "submit_article",
     "description": "生成した記事をJSON構造で提出する",
+    "strict": True,
     "input_schema": {
         "type": "object",
         "properties": {
@@ -52,6 +53,7 @@ ARTICLE_TOOL = {
                         "html": {"type": "string"},
                     },
                     "required": ["heading", "html"],
+                    "additionalProperties": False,
                 },
             },
             "faq": {
@@ -61,6 +63,7 @@ ARTICLE_TOOL = {
                     "type": "object",
                     "properties": {"q": {"type": "string"}, "a": {"type": "string"}},
                     "required": ["q", "a"],
+                    "additionalProperties": False,
                 },
             },
             "recommended_product_ids": {
@@ -78,6 +81,7 @@ ARTICLE_TOOL = {
             "faq",
             "recommended_product_ids",
         ],
+        "additionalProperties": False,
     },
 }
 
@@ -108,23 +112,56 @@ def build_user_prompt(topic: dict, candidate_products: list[dict]) -> str:
 """
 
 
-def generate_one(client: anthropic.Anthropic, topic: dict, products: list[dict]) -> dict:
+def validate_article(article: dict) -> None:
+    if not isinstance(article.get("sections"), list) or not all(
+        isinstance(s, dict) and isinstance(s.get("heading"), str) and isinstance(s.get("html"), str)
+        for s in article["sections"]
+    ):
+        raise ValueError("sections が不正な形式です")
+    if not isinstance(article.get("faq"), list) or not all(
+        isinstance(f, dict) and isinstance(f.get("q"), str) and isinstance(f.get("a"), str)
+        for f in article["faq"]
+    ):
+        raise ValueError("faq が不正な形式です")
+    if not isinstance(article.get("recommended_product_ids"), list):
+        raise ValueError("recommended_product_ids が不正な形式です")
+
+
+def generate_one(
+    client: anthropic.Anthropic, topic: dict, products: list[dict], max_attempts: int = 3
+) -> dict:
     candidates = [p for p in products if p["category"] in topic.get("related_categories", [])]
 
-    response = client.messages.create(
-        model=MODEL,
-        max_tokens=4000,
-        system=SYSTEM_PROMPT,
-        tools=[ARTICLE_TOOL],
-        tool_choice={"type": "tool", "name": "submit_article"},
-        messages=[{"role": "user", "content": build_user_prompt(topic, candidates)}],
-    )
+    last_error: Exception | None = None
+    for attempt in range(1, max_attempts + 1):
+        response = client.messages.create(
+            model=MODEL,
+            max_tokens=4000,
+            system=SYSTEM_PROMPT,
+            tools=[ARTICLE_TOOL],
+            tool_choice={"type": "tool", "name": "submit_article"},
+            messages=[{"role": "user", "content": build_user_prompt(topic, candidates)}],
+        )
 
-    for block in response.content:
-        if block.type == "tool_use" and block.name == "submit_article":
-            return block.input
+        article = None
+        for block in response.content:
+            if block.type == "tool_use" and block.name == "submit_article":
+                article = block.input
+                break
 
-    raise RuntimeError("submit_article ツール呼び出しが見つかりませんでした")
+        if article is None:
+            last_error = RuntimeError("submit_article ツール呼び出しが見つかりませんでした")
+            print(f"  試行{attempt}: ツール呼び出しなし。再試行します")
+            continue
+
+        try:
+            validate_article(article)
+            return article
+        except ValueError as e:
+            last_error = e
+            print(f"  試行{attempt}: 生成データが不正でした（{e}）。再試行します")
+
+    raise RuntimeError(f"{max_attempts}回試行しましたが有効な記事を生成できませんでした: {last_error}")
 
 
 def main() -> None:
