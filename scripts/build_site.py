@@ -77,6 +77,17 @@ def main() -> None:
         encoding="utf-8",
     )
 
+    privacy_tpl = env.get_template("privacy.html")
+    (DOCS_DIR / "privacy.html").write_text(
+        privacy_tpl.render(
+            site=site,
+            current_year=current_year,
+            root_prefix="",
+            asset_prefix="",
+        ),
+        encoding="utf-8",
+    )
+
     article_tpl = env.get_template("article.html")
     for article in articles:
         recommended_products = [

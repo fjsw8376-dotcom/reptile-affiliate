@@ -3,10 +3,15 @@
 {% block meta_description %}{{ site.tagline }}。初心者向けの爬虫類飼育グッズ・お世話の基本をまとめています。{% endblock %}
 
 {% block content %}
+<section class="hero">
+  <p><strong>{{ site.site_name }}</strong>は、爬虫類をこれから迎える方・飼い始めたばかりの方向けに、ケージ・保温器具・床材などの選び方とおすすめグッズを紹介するサイトです。毎週更新しています。</p>
+</section>
+
 <section class="article-list">
   <h1>最新記事</h1>
   {% for article in articles %}
   <article class="article-card">
+    <span class="format-badge {{ article.format }}">{{ "比較・おすすめ" if article.format == "comparison" else "選び方ガイド" }}</span>
     <h2><a href="articles/{{ article.slug }}.html">{{ article.title }}</a></h2>
     <p class="article-date">{{ article.published_date }}</p>
     <p class="article-excerpt">{{ article.meta_description }}</p>

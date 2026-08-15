@@ -4,7 +4,10 @@
 
 {% block content %}
 <article class="article-body">
-  <p class="article-date">{{ article.published_date }}</p>
+  <div class="article-meta">
+    <span class="format-badge {{ article.format }}">{{ "比較・おすすめ" if article.format == "comparison" else "選び方ガイド" }}</span>
+    <span class="article-date">{{ article.published_date }}</span>
+  </div>
   <h1>{{ article.title }}</h1>
 
   <div class="lead">{{ article.intro_html | safe }}</div>

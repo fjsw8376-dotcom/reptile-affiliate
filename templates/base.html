@@ -9,7 +9,12 @@
 </head>
 <body>
 <header class="site-header">
-  <a class="site-title" href="{{ root_prefix }}index.html">{{ site.site_name }}</a>
+  <a class="site-title-row" href="{{ root_prefix }}index.html">
+    <svg class="site-title-icon" viewBox="0 0 24 24" aria-hidden="true">
+      <path d="M12 2c-.9 2.1-2.6 3.2-4.6 3.6C4.9 6 3 7.9 3 10.5c0 1.8 1 3.3 2.5 4.1-.3.9-.5 1.9-.5 2.9 0 2.5 2.2 4.5 5 4.5s5-2 5-4.5c0-.4 0-.8-.1-1.2 1.8-.5 3.1-2.1 3.1-4 0-1.5-.8-2.8-2-3.5.5-.9.8-1.9.8-3C17.8 3.6 15.2 2 12 2z"/>
+    </svg>
+    <span class="site-title">{{ site.site_name }}</span>
+  </a>
   <p class="site-tagline">{{ site.tagline }}</p>
 </header>
 
@@ -21,6 +26,9 @@
   <p class="disclosure">
     当サイトは、Amazon.co.jpを含むAmazonアソシエイト・プログラムの参加者であり、
     適格販売により収入を得ています。
+  </p>
+  <p class="footer-links">
+    <a href="{{ root_prefix }}privacy.html">プライバシーポリシー・免責事項</a>
   </p>
   <p class="copyright">&copy; {{ current_year }} {{ site.site_name }}</p>
 </footer>

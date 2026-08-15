@@ -94,6 +94,22 @@ def save_json(path: Path, data) -> None:
     path.write_text(json.dumps(data, ensure_ascii=False, indent=2) + "\n", encoding="utf-8")
 
 
+GUIDE_FORMAT_INSTRUCTIONS = """記事の形式: ガイド・ハウツー記事
+- テーマについて知っておくべきポイントを3〜5個のセクションに分けて解説する
+- 各セクションは「なぜそれが重要か」「初心者がやりがちな失敗」を含めると読み応えが出る
+- 商品紹介は自然な流れで触れる程度でよい（無理に全セクションに商品を絡めない）
+"""
+
+COMPARISON_FORMAT_INSTRUCTIONS = """記事の形式: 比較・おすすめランキング記事
+- 「結局どれを選べばいいか」に答える記事にする。読者は購入を検討している
+- sections は基本的に1セクション＝1商品として構成する（候補商品の数だけセクションを作る。3〜5個の範囲に収める）
+- 各セクションのhtmlには、その商品の特徴・メリット・「こんな人におすすめ」を必ず1文含める
+- recommended_product_ids には、記事で取り上げた商品のidを漏れなく含める
+- 候補商品が2個以下しかない場合は、無理に比較記事にせず「選ぶ時に見るべきポイント」を中心にした構成に切り替えてよい
+- 記事の冒頭（intro_html）で「結論、こういう人には〇〇がおすすめ」という要約を先出しする
+"""
+
+
 def build_user_prompt(topic: dict, candidate_products: list[dict]) -> str:
     products_text = "なし"
     if candidate_products:
@@ -103,9 +119,17 @@ def build_user_prompt(topic: dict, candidate_products: list[dict]) -> str:
         ]
         products_text = "\n".join(lines)
 
+    format_instructions = (
+        COMPARISON_FORMAT_INSTRUCTIONS
+        if topic.get("format") == "comparison"
+        else GUIDE_FORMAT_INSTRUCTIONS
+    )
+
     return f"""以下のテーマで記事を1本作成し、submit_article ツールで提出してください。
 
 テーマ: {topic['topic']}
+
+{format_instructions}
 
 紹介候補の商品（この中から関連するものだけ recommended_product_ids に含める。無理に全部使わなくてよい。存在しない商品や候補にない商品を書かない）:
 {products_text}
@@ -187,6 +211,7 @@ def main() -> None:
         article["published_date"] = today
         article["generated_at"] = now_iso
         article["source_topic"] = topic["topic"]
+        article["format"] = topic.get("format", "guide")
 
         out_path = ARTICLES_DIR / f"{today}-{article['slug']}.json"
         save_json(out_path, article)

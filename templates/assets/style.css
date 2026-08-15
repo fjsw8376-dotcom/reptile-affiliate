@@ -1,106 +1,262 @@
 :root {
-  --color-bg: #faf7f2;
-  --color-text: #2b2620;
-  --color-accent: #2f7a4f;
-  --color-muted: #7a7268;
-  --color-card-bg: #ffffff;
-  --color-border: #e6e0d6;
+  --color-bg: #f6f2e9;
+  --color-bg-alt: #eee7d6;
+  --color-text: #2e2a20;
+  --color-muted: #756c5a;
+  --color-card-bg: #fffdf7;
+  --color-border: #e2d9c2;
+  --color-forest: #35563f;
+  --color-forest-dark: #26402e;
+  --color-moss: #6b8f5e;
+  --color-terracotta: #c1663b;
+  --color-terracotta-dark: #a4502b;
+  --font-heading: Georgia, "Hiragino Mincho ProN", "Yu Mincho", serif;
+  --font-body: "Hiragino Sans", "Yu Gothic", sans-serif;
 }
 
 * { box-sizing: border-box; }
 
 body {
   margin: 0;
-  font-family: "Hiragino Sans", "Yu Gothic", sans-serif;
-  background: var(--color-bg);
+  font-family: var(--font-body);
+  background:
+    radial-gradient(circle at 15% 0%, rgba(107, 143, 94, 0.10), transparent 45%),
+    radial-gradient(circle at 100% 20%, rgba(193, 102, 59, 0.08), transparent 40%),
+    var(--color-bg);
   color: var(--color-text);
-  line-height: 1.8;
+  line-height: 1.85;
 }
+
+a { color: inherit; }
+
+/* ---------- Header ---------- */
 
 .site-header {
-  padding: 2rem 1.5rem 1.5rem;
+  padding: 2.6rem 1.5rem 2rem;
   text-align: center;
-  border-bottom: 1px solid var(--color-border);
+  background: linear-gradient(180deg, var(--color-forest-dark) 0%, var(--color-forest) 100%);
+  color: #f3efe1;
+  position: relative;
+  overflow: hidden;
 }
 
+.site-header::after {
+  content: "";
+  position: absolute;
+  inset: auto 0 -1px 0;
+  height: 18px;
+  background: var(--color-bg);
+  clip-path: polygon(0% 100%, 4% 30%, 8% 100%, 12% 20%, 16% 100%, 20% 35%, 24% 100%, 28% 15%, 32% 100%, 36% 30%, 40% 100%, 44% 20%, 48% 100%, 52% 35%, 56% 100%, 60% 15%, 64% 100%, 68% 30%, 72% 100%, 76% 20%, 80% 100%, 84% 35%, 88% 100%, 92% 15%, 96% 100%, 100% 30%, 100% 100%, 0 100%);
+}
+
+.site-title-row {
+  display: inline-flex;
+  align-items: center;
+  gap: 0.55rem;
+}
+
+.site-title-icon { width: 30px; height: 30px; flex-shrink: 0; }
+.site-title-icon path { fill: #d8c98f; }
+
 .site-title {
-  font-size: 1.6rem;
+  font-family: var(--font-heading);
+  font-size: 1.7rem;
   font-weight: bold;
-  color: var(--color-accent);
+  color: #f3efe1;
   text-decoration: none;
+  letter-spacing: 0.02em;
 }
 
 .site-tagline {
-  color: var(--color-muted);
-  margin-top: 0.4rem;
+  color: #cddac2;
+  margin-top: 0.5rem;
+  font-size: 0.95rem;
 }
 
+/* ---------- Layout ---------- */
+
 .site-main {
-  max-width: 720px;
+  max-width: 760px;
   margin: 0 auto;
-  padding: 2rem 1.5rem;
+  padding: 2.4rem 1.5rem 3rem;
+}
+
+/* ---------- Hero (index only) ---------- */
+
+.hero {
+  background: var(--color-card-bg);
+  border: 1px solid var(--color-border);
+  border-radius: 14px;
+  padding: 1.6rem 1.8rem;
+  margin-bottom: 2rem;
+  position: relative;
+}
+
+.hero::before {
+  content: "🦎";
+  position: absolute;
+  top: -14px;
+  right: 18px;
+  font-size: 1.6rem;
+  background: var(--color-bg);
+  padding: 0 0.3rem;
+}
+
+.hero p {
+  margin: 0;
+  color: var(--color-muted);
+  font-size: 0.96rem;
+}
+
+.hero strong { color: var(--color-forest-dark); }
+
+/* ---------- Article cards (index) ---------- */
+
+.article-list h1 {
+  font-family: var(--font-heading);
+  font-size: 1.4rem;
+  color: var(--color-forest-dark);
+  border-bottom: 2px solid var(--color-moss);
+  padding-bottom: 0.5rem;
+  margin-bottom: 1.4rem;
 }
 
 .article-card {
   background: var(--color-card-bg);
   border: 1px solid var(--color-border);
-  border-radius: 8px;
-  padding: 1.2rem 1.5rem;
-  margin-bottom: 1.2rem;
+  border-radius: 12px;
+  padding: 1.3rem 1.5rem;
+  margin-bottom: 1.1rem;
+  transition: box-shadow 0.15s ease, transform 0.15s ease;
 }
 
-.article-card h2 { margin: 0 0 0.3rem; font-size: 1.15rem; }
-.article-card a { color: var(--color-text); text-decoration: none; }
-.article-card a:hover { color: var(--color-accent); }
+.article-card:hover {
+  box-shadow: 0 6px 18px rgba(53, 86, 63, 0.12);
+  transform: translateY(-1px);
+}
 
-.article-date, .faq-q { color: var(--color-muted); font-size: 0.9rem; }
+.article-card h2 { margin: 0.2rem 0 0.4rem; font-size: 1.12rem; line-height: 1.5; }
+.article-card a { text-decoration: none; }
+.article-card a:hover { color: var(--color-forest); }
 
-.article-body h1 { font-size: 1.6rem; margin-top: 0.3rem; }
-.article-section { margin-top: 1.8rem; }
-.article-section h2 { font-size: 1.25rem; border-left: 4px solid var(--color-accent); padding-left: 0.6rem; }
+.article-date, .faq-q { color: var(--color-muted); font-size: 0.85rem; }
+.article-excerpt { color: var(--color-muted); font-size: 0.92rem; margin: 0.3rem 0 0; }
+
+.format-badge {
+  display: inline-block;
+  font-size: 0.72rem;
+  font-weight: bold;
+  padding: 0.15rem 0.6rem;
+  border-radius: 999px;
+  letter-spacing: 0.03em;
+}
+
+.format-badge.guide { background: #e5eee1; color: var(--color-forest-dark); }
+.format-badge.comparison { background: #f5e2d6; color: var(--color-terracotta-dark); }
+
+/* ---------- Article body ---------- */
+
+.article-body h1 {
+  font-family: var(--font-heading);
+  font-size: 1.55rem;
+  margin: 0.6rem 0 1rem;
+  color: var(--color-forest-dark);
+  line-height: 1.5;
+}
+
+.article-meta { display: flex; align-items: center; gap: 0.6rem; margin-bottom: 0.3rem; }
+
+.lead { font-size: 1.02rem; }
+
+.article-section { margin-top: 2rem; }
+
+.article-section h2 {
+  font-family: var(--font-heading);
+  font-size: 1.2rem;
+  color: var(--color-forest-dark);
+  border-left: 5px solid var(--color-moss);
+  padding-left: 0.7rem;
+}
+
+/* ---------- Product recommendation box ---------- */
 
 .product-recommend {
   background: var(--color-card-bg);
   border: 1px solid var(--color-border);
-  border-radius: 8px;
-  padding: 1.2rem 1.5rem;
-  margin-top: 2rem;
+  border-radius: 14px;
+  padding: 1.4rem 1.6rem;
+  margin-top: 2.2rem;
+  position: relative;
 }
 
-.ad-label { font-size: 0.75rem; color: var(--color-muted); margin: 0 0 0.5rem; }
+.ad-label {
+  font-size: 0.72rem;
+  color: var(--color-muted);
+  margin: 0 0 0.6rem;
+  letter-spacing: 0.02em;
+}
+
+.product-recommend h2 {
+  font-family: var(--font-heading);
+  font-size: 1.15rem;
+  color: var(--color-forest-dark);
+  margin-top: 0;
+}
+
 .product-list { list-style: none; padding: 0; }
-.product-item { padding: 0.8rem 0; border-top: 1px solid var(--color-border); }
+.product-item { padding: 0.9rem 0; border-top: 1px solid var(--color-border); }
 .product-item:first-child { border-top: none; }
 .product-name { font-weight: bold; margin: 0 0 0.3rem; }
-.product-notes { color: var(--color-muted); font-size: 0.9rem; margin: 0 0 0.5rem; }
+.product-notes { color: var(--color-muted); font-size: 0.9rem; margin: 0 0 0.6rem; }
+
 .product-link {
   display: inline-block;
-  background: var(--color-accent);
+  background: var(--color-terracotta);
   color: #fff;
-  padding: 0.4rem 1rem;
-  border-radius: 4px;
+  padding: 0.45rem 1.1rem;
+  border-radius: 6px;
   text-decoration: none;
   font-size: 0.9rem;
+  font-weight: bold;
 }
 
-.faq { margin-top: 2rem; }
-.faq-item { margin-bottom: 1rem; }
-.faq-a { margin-top: 0.2rem; }
+.product-link:hover { background: var(--color-terracotta-dark); }
+
+/* ---------- FAQ ---------- */
+
+.faq { margin-top: 2.2rem; }
+.faq h2 {
+  font-family: var(--font-heading);
+  font-size: 1.15rem;
+  color: var(--color-forest-dark);
+}
+.faq-item {
+  margin-bottom: 1rem;
+  padding: 0.9rem 1.1rem;
+  background: var(--color-bg-alt);
+  border-radius: 10px;
+}
+.faq-a { margin-top: 0.3rem; }
 
 .health-disclaimer {
-  margin-top: 2.5rem;
+  margin-top: 2.6rem;
   font-size: 0.85rem;
   color: var(--color-muted);
   border-top: 1px solid var(--color-border);
   padding-top: 1rem;
 }
 
+/* ---------- Footer ---------- */
+
 .site-footer {
   text-align: center;
-  padding: 2rem 1.5rem;
-  color: var(--color-muted);
+  padding: 2.4rem 1.5rem;
+  color: #cddac2;
   font-size: 0.8rem;
-  border-top: 1px solid var(--color-border);
+  background: var(--color-forest-dark);
 }
 
-.disclosure { max-width: 520px; margin: 0 auto 0.5rem; }
+.site-footer a { color: #e8dfc0; }
+.disclosure { max-width: 520px; margin: 0 auto 0.6rem; }
+.footer-links { margin-bottom: 0.6rem; }
+.footer-links a { margin: 0 0.5rem; text-decoration: underline; }
