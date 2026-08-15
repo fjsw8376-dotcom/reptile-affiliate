@@ -1,0 +1,22 @@
+[
+  { "topic": "初心者向け爬虫類ケージの選び方", "related_categories": ["ケージ"] },
+  { "topic": "サーモスタットはなぜ必要か。選び方の基本", "related_categories": ["保温器具"] },
+  { "topic": "紫外線ライト(UVB)の役割と選び方", "related_categories": ["ライト"] },
+  { "topic": "床材の種類と選び方（保湿・掃除のしやすさ比較）", "related_categories": ["床材"] },
+  { "topic": "ヒョウモントカゲモドキの飼育入門", "related_categories": ["ケージ", "床材", "餌"] },
+  { "topic": "フトアゴヒゲトカゲの飼育入門", "related_categories": ["ケージ", "ライト", "保温器具"] },
+  { "topic": "冬場の温度管理と保温グッズの選び方", "related_categories": ["保温器具"] },
+  { "topic": "夏場の暑さ対策グッズ", "related_categories": ["保温器具", "ケージ"] },
+  { "topic": "昆虫食と人工飼料、餌の与え方の基本", "related_categories": ["餌"] },
+  { "topic": "水入れ・湿度管理グッズの選び方", "related_categories": ["床材", "ケージ"] },
+  { "topic": "爬虫類の脱走防止対策グッズ", "related_categories": ["ケージ"] },
+  { "topic": "多頭飼育を始める前に知っておきたいこと", "related_categories": ["ケージ"] },
+  { "topic": "旅行・外出時の留守番対策", "related_categories": ["保温器具", "餌"] },
+  { "topic": "ケージの掃除・消臭グッズ", "related_categories": ["床材"] },
+  { "topic": "ヘビ飼育を始めるための基本グッズ", "related_categories": ["ケージ", "保温器具"] },
+  { "topic": "カメ飼育を始めるための基本グッズ", "related_categories": ["ケージ", "ライト"] },
+  { "topic": "温度・湿度計の選び方と設置場所", "related_categories": ["保温器具", "ケージ"] },
+  { "topic": "爬虫類のケージレイアウト・シェルター選び", "related_categories": ["ケージ"] },
+  { "topic": "電気代を抑える保温グッズの使い方", "related_categories": ["保温器具"] },
+  { "topic": "初めての爬虫類選び、飼いやすい種類とは", "related_categories": ["ケージ", "餌"] }
+]

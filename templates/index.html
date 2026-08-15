@@ -1,0 +1,18 @@
+{% extends "base.html" %}
+{% block title %}{{ site.site_name }} | {{ site.tagline }}{% endblock %}
+{% block meta_description %}{{ site.tagline }}。初心者向けの爬虫類飼育グッズ・お世話の基本をまとめています。{% endblock %}
+
+{% block content %}
+<section class="article-list">
+  <h1>最新記事</h1>
+  {% for article in articles %}
+  <article class="article-card">
+    <h2><a href="articles/{{ article.slug }}.html">{{ article.title }}</a></h2>
+    <p class="article-date">{{ article.published_date }}</p>
+    <p class="article-excerpt">{{ article.meta_description }}</p>
+  </article>
+  {% else %}
+  <p>準備中です。まもなく記事が公開されます。</p>
+  {% endfor %}
+</section>
+{% endblock %}

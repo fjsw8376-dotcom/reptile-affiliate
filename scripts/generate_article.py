@@ -1,0 +1,164 @@
+"""Claude APIで爬虫類グッズ紹介記事を自動生成し articles/ に保存する。
+
+GitHub Actionsから毎週実行される想定。topics_state.json のインデックスを
+進めながら topics.json を順番に消化する。1回の実行で site_config.json の
+articles_per_run 件を生成する。
+"""
+import json
+import os
+from datetime import date, datetime, timezone
+from pathlib import Path
+
+import anthropic
+
+ROOT = Path(__file__).resolve().parent.parent
+SITE_CONFIG_PATH = ROOT / "site_config.json"
+TOPICS_PATH = ROOT / "topics.json"
+STATE_PATH = ROOT / "topics_state.json"
+PRODUCTS_PATH = ROOT / "products.json"
+ARTICLES_DIR = ROOT / "articles"
+
+MODEL = "claude-sonnet-5"
+
+SYSTEM_PROMPT = """あなたは日本の爬虫類飼育情報サイトの専属ライターです。
+初心者〜中級者の飼育者に向けて、信頼できる一般的な飼育知識を分かりやすく伝える記事を書きます。
+
+厳守事項:
+- 事実に基づかない断定（治療効果・寿命の保証など）は書かない
+- 商品の価格や詳細スペックの具体的な数字は書かない（変動するため。名前と用途の説明にとどめる）
+- 個体の健康に関わる内容は「専門の動物病院に相談を」という趣旨を自然に含める
+- 見出し・本文は自然なSEOを意識するが、キーワードの不自然な連呼はしない
+- 断定できない情報は「一般的には」「〜と言われています」等、表現を和らげる
+- 本文はHTMLの断片（h2は使わず、pやul/li、strongなどのタグのみ）で書く。h1やhtml/head/bodyタグは書かない
+"""
+
+ARTICLE_TOOL = {
+    "name": "submit_article",
+    "description": "生成した記事をJSON構造で提出する",
+    "input_schema": {
+        "type": "object",
+        "properties": {
+            "title": {"type": "string", "description": "記事タイトル（30〜40字目安）"},
+            "meta_description": {"type": "string", "description": "検索結果に出る説明文。100〜120字"},
+            "slug": {"type": "string", "description": "URL用のスラッグ。半角英数とハイフンのみ"},
+            "intro_html": {"type": "string", "description": "導入部分のHTML断片（2〜3段落）"},
+            "sections": {
+                "type": "array",
+                "description": "本文の見出しセクション。3〜5個",
+                "items": {
+                    "type": "object",
+                    "properties": {
+                        "heading": {"type": "string"},
+                        "html": {"type": "string"},
+                    },
+                    "required": ["heading", "html"],
+                },
+            },
+            "faq": {
+                "type": "array",
+                "description": "よくある質問。2〜4個",
+                "items": {
+                    "type": "object",
+                    "properties": {"q": {"type": "string"}, "a": {"type": "string"}},
+                    "required": ["q", "a"],
+                },
+            },
+            "recommended_product_ids": {
+                "type": "array",
+                "description": "紹介候補として渡された商品リストの中から、この記事に関連するものの id。関連商品がなければ空配列",
+                "items": {"type": "string"},
+            },
+        },
+        "required": [
+            "title",
+            "meta_description",
+            "slug",
+            "intro_html",
+            "sections",
+            "faq",
+            "recommended_product_ids",
+        ],
+    },
+}
+
+
+def load_json(path: Path):
+    return json.loads(path.read_text(encoding="utf-8"))
+
+
+def save_json(path: Path, data) -> None:
+    path.write_text(json.dumps(data, ensure_ascii=False, indent=2) + "\n", encoding="utf-8")
+
+
+def build_user_prompt(topic: dict, candidate_products: list[dict]) -> str:
+    products_text = "なし"
+    if candidate_products:
+        lines = [
+            f"- id: {p['id']} / 商品名: {p['name']} / メモ: {p.get('notes', '')}"
+            for p in candidate_products
+        ]
+        products_text = "\n".join(lines)
+
+    return f"""以下のテーマで記事を1本作成し、submit_article ツールで提出してください。
+
+テーマ: {topic['topic']}
+
+紹介候補の商品（この中から関連するものだけ recommended_product_ids に含める。無理に全部使わなくてよい。存在しない商品や候補にない商品を書かない）:
+{products_text}
+"""
+
+
+def generate_one(client: anthropic.Anthropic, topic: dict, products: list[dict]) -> dict:
+    candidates = [p for p in products if p["category"] in topic.get("related_categories", [])]
+
+    response = client.messages.create(
+        model=MODEL,
+        max_tokens=4000,
+        system=SYSTEM_PROMPT,
+        tools=[ARTICLE_TOOL],
+        tool_choice={"type": "tool", "name": "submit_article"},
+        messages=[{"role": "user", "content": build_user_prompt(topic, candidates)}],
+    )
+
+    for block in response.content:
+        if block.type == "tool_use" and block.name == "submit_article":
+            return block.input
+
+    raise RuntimeError("submit_article ツール呼び出しが見つかりませんでした")
+
+
+def main() -> None:
+    config = load_json(SITE_CONFIG_PATH)
+    topics = load_json(TOPICS_PATH)
+    state = load_json(STATE_PATH)
+    products = load_json(PRODUCTS_PATH)
+
+    client = anthropic.Anthropic()
+
+    count = config.get("articles_per_run", 2)
+    today = date.today().isoformat()
+    now_iso = datetime.now(timezone.utc).isoformat()
+
+    ARTICLES_DIR.mkdir(exist_ok=True)
+
+    for _ in range(count):
+        state["last_index"] = (state["last_index"] + 1) % len(topics)
+        topic = topics[state["last_index"]]
+
+        print(f"生成中: {topic['topic']}")
+        article = generate_one(client, topic, products)
+        article["published_date"] = today
+        article["generated_at"] = now_iso
+        article["source_topic"] = topic["topic"]
+
+        out_path = ARTICLES_DIR / f"{today}-{article['slug']}.json"
+        save_json(out_path, article)
+        print(f"保存: {out_path}")
+
+    save_json(STATE_PATH, state)
+
+
+if __name__ == "__main__":
+    if not os.environ.get("ANTHROPIC_API_KEY"):
+        raise SystemExit("環境変数 ANTHROPIC_API_KEY が設定されていません")
+    main()

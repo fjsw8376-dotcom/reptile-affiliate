@@ -1,0 +1,53 @@
+{% extends "base.html" %}
+{% block title %}{{ article.title }} | {{ site.site_name }}{% endblock %}
+{% block meta_description %}{{ article.meta_description }}{% endblock %}
+
+{% block content %}
+<article class="article-body">
+  <p class="article-date">{{ article.published_date }}</p>
+  <h1>{{ article.title }}</h1>
+
+  <div class="lead">{{ article.intro_html | safe }}</div>
+
+  {% for section in article.sections %}
+  <section class="article-section">
+    <h2>{{ section.heading }}</h2>
+    {{ section.html | safe }}
+  </section>
+  {% endfor %}
+
+  {% if recommended_products %}
+  <section class="product-recommend">
+    <p class="ad-label">PR（Amazonアソシエイトリンクを含みます）</p>
+    <h2>この記事で紹介したグッズ</h2>
+    <ul class="product-list">
+      {% for product in recommended_products %}
+      <li class="product-item">
+        <p class="product-name">{{ product.name }}</p>
+        {% if product.notes %}<p class="product-notes">{{ product.notes }}</p>{% endif %}
+        <a class="product-link" href="https://www.amazon.co.jp/dp/{{ product.asin }}?tag={{ site.amazon_tracking_tag }}" rel="nofollow sponsored" target="_blank">
+          Amazonで見る
+        </a>
+      </li>
+      {% endfor %}
+    </ul>
+  </section>
+  {% endif %}
+
+  {% if article.faq %}
+  <section class="faq">
+    <h2>よくある質問</h2>
+    {% for item in article.faq %}
+    <div class="faq-item">
+      <p class="faq-q">Q. {{ item.q }}</p>
+      <p class="faq-a">A. {{ item.a }}</p>
+    </div>
+    {% endfor %}
+  </section>
+  {% endif %}
+
+  <p class="health-disclaimer">
+    本記事は一般的な飼育情報の紹介です。個体の健康状態に関わる判断は、必ず爬虫類を診療できる動物病院にご相談ください。
+  </p>
+</article>
+{% endblock %}

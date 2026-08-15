@@ -1,0 +1,28 @@
+<!DOCTYPE html>
+<html lang="ja">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>{% block title %}{{ site.site_name }}{% endblock %}</title>
+<meta name="description" content="{% block meta_description %}{{ site.tagline }}{% endblock %}">
+<link rel="stylesheet" href="{{ asset_prefix }}assets/style.css">
+</head>
+<body>
+<header class="site-header">
+  <a class="site-title" href="{{ root_prefix }}index.html">{{ site.site_name }}</a>
+  <p class="site-tagline">{{ site.tagline }}</p>
+</header>
+
+<main class="site-main">
+{% block content %}{% endblock %}
+</main>
+
+<footer class="site-footer">
+  <p class="disclosure">
+    当サイトは、Amazon.co.jpを含むAmazonアソシエイト・プログラムの参加者であり、
+    適格販売により収入を得ています。
+  </p>
+  <p class="copyright">&copy; {{ current_year }} {{ site.site_name }}</p>
+</footer>
+</body>
+</html>
