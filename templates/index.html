@@ -1,6 +1,20 @@
 {% extends "base.html" %}
 {% block title %}{{ site.site_name }} | {{ site.tagline }}{% endblock %}
 {% block meta_description %}{{ site.tagline }}。初心者向けの爬虫類飼育グッズ・お世話の基本をまとめています。{% endblock %}
+{% block og_title %}{{ site.site_name }}{% endblock %}
+{% block og_description %}{{ site.tagline }}{% endblock %}
+
+{% block structured_data %}
+<script type="application/ld+json">
+{
+  "@context": "https://schema.org",
+  "@type": "WebSite",
+  "name": "{{ site.site_name }}",
+  "description": "{{ site.tagline }}",
+  "url": "{{ site.base_url }}"
+}
+</script>
+{% endblock %}
 
 {% block content %}
 <section class="hero">

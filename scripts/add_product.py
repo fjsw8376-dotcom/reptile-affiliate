@@ -49,16 +49,21 @@ def main() -> None:
     name = input("商品名: ").strip()
     category = input(f"カテゴリ（{'/'.join(categories)}）: ").strip()
     notes = input("補足メモ（商品の特徴・おすすめポイント。価格は書かない）: ").strip()
+    image_url = input(
+        "商品画像URL（SiteStripeで取得したもの。任意・空欄でスキップ可）: "
+    ).strip()
 
-    products.append(
-        {
-            "id": asin.lower(),
-            "asin": asin,
-            "name": name,
-            "category": category,
-            "notes": notes,
-        }
-    )
+    entry = {
+        "id": asin.lower(),
+        "asin": asin,
+        "name": name,
+        "category": category,
+        "notes": notes,
+    }
+    if image_url:
+        entry["image_url"] = image_url
+
+    products.append(entry)
 
     PRODUCTS_PATH.write_text(
         json.dumps(products, ensure_ascii=False, indent=2) + "\n", encoding="utf-8"

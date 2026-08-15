@@ -3,9 +3,25 @@
 <head>
 <meta charset="UTF-8">
 <meta name="viewport" content="width=device-width, initial-scale=1.0">
+<meta name="robots" content="index, follow">
 <title>{% block title %}{{ site.site_name }}{% endblock %}</title>
 <meta name="description" content="{% block meta_description %}{{ site.tagline }}{% endblock %}">
+<link rel="canonical" href="{{ site.base_url }}{{ canonical_path }}">
 <link rel="stylesheet" href="{{ asset_prefix }}assets/style.css">
+
+<meta property="og:site_name" content="{{ site.site_name }}">
+<meta property="og:type" content="{% block og_type %}website{% endblock %}">
+<meta property="og:url" content="{{ site.base_url }}{{ canonical_path }}">
+<meta property="og:title" content="{% block og_title %}{{ site.site_name }}{% endblock %}">
+<meta property="og:description" content="{% block og_description %}{{ site.tagline }}{% endblock %}">
+<meta property="og:locale" content="ja_JP">
+{% block og_image %}{% endblock %}
+
+<meta name="twitter:card" content="summary">
+<meta name="twitter:title" content="{% block twitter_title %}{{ site.site_name }}{% endblock %}">
+<meta name="twitter:description" content="{% block twitter_description %}{{ site.tagline }}{% endblock %}">
+
+{% block structured_data %}{% endblock %}
 </head>
 <body>
 <header class="site-header">

@@ -1,0 +1,4 @@
+User-agent: *
+Allow: /
+
+Sitemap: https://fjsw8376-dotcom.github.io/reptile-affiliate/sitemap.xml

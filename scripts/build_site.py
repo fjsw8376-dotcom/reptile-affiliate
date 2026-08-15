@@ -50,6 +50,7 @@ def main() -> None:
     articles = load_articles()
 
     env = Environment(loader=FileSystemLoader(str(TEMPLATES_DIR)))
+    env.filters["tojson"] = lambda v: json.dumps(v, ensure_ascii=False)
     current_year = datetime.now().year
 
     DOCS_DIR.mkdir(exist_ok=True)
@@ -73,6 +74,7 @@ def main() -> None:
             current_year=current_year,
             root_prefix="",
             asset_prefix="",
+            canonical_path="",
         ),
         encoding="utf-8",
     )
@@ -84,6 +86,7 @@ def main() -> None:
             current_year=current_year,
             root_prefix="",
             asset_prefix="",
+            canonical_path="privacy.html",
         ),
         encoding="utf-8",
     )
@@ -104,11 +107,43 @@ def main() -> None:
                 current_year=current_year,
                 root_prefix="../",
                 asset_prefix="../",
+                canonical_path=f"articles/{article['slug']}.html",
             ),
             encoding="utf-8",
         )
 
+    write_sitemap(site, articles)
+    write_robots_txt(site)
+
     print(f"生成完了: 記事 {len(articles)} 件 -> {DOCS_DIR}")
+
+
+def write_sitemap(site: dict, articles: list[dict]) -> None:
+    base_url = site["base_url"]
+    urls = [(f"{base_url}", None), (f"{base_url}privacy.html", None)]
+    for article in articles:
+        urls.append((f"{base_url}articles/{article['slug']}.html", article["published_date"]))
+
+    entries = []
+    for loc, lastmod in urls:
+        entry = f"  <url>\n    <loc>{loc}</loc>"
+        if lastmod:
+            entry += f"\n    <lastmod>{lastmod}</lastmod>"
+        entry += "\n  </url>"
+        entries.append(entry)
+
+    xml = (
+        '<?xml version="1.0" encoding="UTF-8"?>\n'
+        '<urlset xmlns="http://www.sitemaps.org/schemas/sitemap/0.9">\n'
+        + "\n".join(entries)
+        + "\n</urlset>\n"
+    )
+    (DOCS_DIR / "sitemap.xml").write_text(xml, encoding="utf-8")
+
+
+def write_robots_txt(site: dict) -> None:
+    content = f"User-agent: *\nAllow: /\n\nSitemap: {site['base_url']}sitemap.xml\n"
+    (DOCS_DIR / "robots.txt").write_text(content, encoding="utf-8")
 
 
 if __name__ == "__main__":

@@ -206,8 +206,24 @@ a { color: inherit; }
 .product-list { list-style: none; padding: 0; }
 .product-item { padding: 0.9rem 0; border-top: 1px solid var(--color-border); }
 .product-item:first-child { border-top: none; }
+.product-item-inner { display: flex; gap: 1rem; align-items: flex-start; }
+.product-image-link { flex-shrink: 0; }
+.product-image {
+  width: 92px;
+  height: 92px;
+  object-fit: contain;
+  background: #fff;
+  border: 1px solid var(--color-border);
+  border-radius: 8px;
+  padding: 0.3rem;
+}
+.product-info { flex: 1; min-width: 0; }
 .product-name { font-weight: bold; margin: 0 0 0.3rem; }
 .product-notes { color: var(--color-muted); font-size: 0.9rem; margin: 0 0 0.6rem; }
+
+@media (max-width: 480px) {
+  .product-image { width: 72px; height: 72px; }
+}
 
 .product-link {
   display: inline-block;
