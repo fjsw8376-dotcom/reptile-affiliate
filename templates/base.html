@@ -24,7 +24,7 @@
 
 {% block structured_data %}{% endblock %}
 </head>
-<body>
+<body style="--theme-color: {{ theme_color }}; --theme-color-dark: {{ theme_color_dark }}; --theme-color-light: {{ theme_color_light }};">
 <header class="site-header">
   <a class="site-title-row" href="{{ root_prefix }}index.html">
     <svg class="site-title-icon" viewBox="0 0 24 24" aria-hidden="true">
@@ -34,9 +34,9 @@
   </a>
   <p class="site-tagline">{{ site.tagline }}</p>
   <nav class="genre-nav">
-    <a class="genre-pill{{ ' active' if not current_genre_slug else '' }}" href="{{ root_prefix }}index.html">すべて</a>
+    <a class="genre-pill{{ ' active' if not current_genre_slug else '' }}" href="{{ root_prefix }}index.html">🏠 すべて</a>
     {% for g in site.genres %}
-    <a class="genre-pill{{ ' active' if current_genre_slug == g.slug else '' }}" href="{{ root_prefix }}{{ g.slug }}.html">{{ g.name }}</a>
+    <a class="genre-pill{{ ' active' if current_genre_slug == g.slug else '' }}" style="--pill-color: {{ g.color }}; --pill-color-light: {{ g.color_light }};" href="{{ root_prefix }}{{ g.slug }}.html">{{ g.icon }} {{ g.name }}</a>
     {% endfor %}
   </nav>
 </header>

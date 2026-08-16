@@ -1,8 +1,9 @@
-{% macro article_card(article, path_prefix) %}
+{% macro article_card(article, path_prefix, genres) %}
+{% set g = (genres | selectattr("name", "equalto", article.genre) | first) %}
 <article class="article-card">
   <div class="card-badges">
-    <span class="genre-badge">{{ article.genre }}</span>
-    <span class="format-badge {{ article.format }}">{{ "比較・おすすめ" if article.format == "comparison" else "選び方ガイド" }}</span>
+    <span class="genre-badge" style="--badge-color: {{ g.color if g else '#35563f' }}; --badge-color-light: {{ g.color_light if g else '#e5eee1' }};">{{ g.icon if g else '' }} {{ article.genre }}</span>
+    <span class="format-badge">{{ "⚖️ 比較・おすすめ" if article.format == "comparison" else "📖 選び方ガイド" }}</span>
   </div>
   <h2><a href="{{ path_prefix }}articles/{{ article.slug }}.html">{{ article.title }}</a></h2>
   <p class="article-date">{{ article.published_date }}</p>

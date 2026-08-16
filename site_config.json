@@ -9,17 +9,29 @@
     {
       "slug": "reptiles",
       "name": "爬虫類",
-      "tagline": "ケージ・保温器具・紫外線ライトの選び方とおすすめグッズ"
+      "tagline": "ケージ・保温器具・紫外線ライトの選び方とおすすめグッズ",
+      "icon": "🦎",
+      "color": "#35563f",
+      "color_dark": "#26402e",
+      "color_light": "#e5eee1"
     },
     {
       "slug": "amphibians",
       "name": "両生類",
-      "tagline": "カエル・イモリなど多湿を好む種の飼育グッズ"
+      "tagline": "カエル・イモリなど多湿を好む種の飼育グッズ",
+      "icon": "🐸",
+      "color": "#1f6f7a",
+      "color_dark": "#163f45",
+      "color_light": "#dcecee"
     },
     {
       "slug": "insects",
       "name": "昆虫・クモ類",
-      "tagline": "クワガタ・カブトムシ・タランチュラの飼育グッズ"
+      "tagline": "クワガタ・カブトムシ・タランチュラの飼育グッズ",
+      "icon": "🪲",
+      "color": "#a6741c",
+      "color_dark": "#6b4d14",
+      "color_light": "#f3e8d2"
     }
   ]
 }

@@ -19,13 +19,13 @@
 
 {% block content %}
 <section class="hero">
-  <p><strong>{{ genre.name }}</strong>の飼育グッズ情報です。{{ genre.tagline }}</p>
+  <p>{{ genre.icon }} <strong>{{ genre.name }}</strong>の飼育グッズ情報です。{{ genre.tagline }}</p>
 </section>
 
 <section class="article-list">
   <h1>{{ genre.name }}の記事一覧</h1>
   {% for article in articles %}
-  {{ article_card(article, "") }}
+  {{ article_card(article, "", site.genres) }}
   {% else %}
   <p>準備中です。まもなく{{ genre.name }}の記事が公開されます。</p>
   {% endfor %}

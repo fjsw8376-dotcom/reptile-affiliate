@@ -24,7 +24,8 @@
 
 <section class="genre-cards">
   {% for g in site.genres %}
-  <a class="genre-card" href="{{ g.slug }}.html">
+  <a class="genre-card" href="{{ g.slug }}.html" style="--card-color: {{ g.color }}; --card-color-light: {{ g.color_light }};">
+    <span class="genre-card-icon">{{ g.icon }}</span>
     <h2>{{ g.name }}</h2>
     <p>{{ g.tagline }}</p>
   </a>
@@ -34,7 +35,7 @@
 <section class="article-list">
   <h1>最新記事</h1>
   {% for article in articles %}
-  {{ article_card(article, "") }}
+  {{ article_card(article, "", site.genres) }}
   {% else %}
   <p>準備中です。まもなく記事が公開されます。</p>
   {% endfor %}

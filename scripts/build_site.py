@@ -51,6 +51,17 @@ def main() -> None:
     articles = load_articles()
     genres = site.get("genres", [])
     slug_by_genre_name = {g["name"]: g["slug"] for g in genres}
+    genre_by_name = {g["name"]: g for g in genres}
+    default_genre = genres[0] if genres else {
+        "color": "#35563f", "color_dark": "#26402e", "color_light": "#e5eee1"
+    }
+
+    def theme_of(genre: dict) -> dict:
+        return {
+            "theme_color": genre.get("color", default_genre["color"]),
+            "theme_color_dark": genre.get("color_dark", default_genre["color_dark"]),
+            "theme_color_light": genre.get("color_light", default_genre["color_light"]),
+        }
 
     env = Environment(loader=FileSystemLoader(str(TEMPLATES_DIR)))
     env.filters["tojson"] = lambda v: json.dumps(v, ensure_ascii=False)
@@ -79,6 +90,7 @@ def main() -> None:
             asset_prefix="",
             canonical_path="",
             current_genre_slug="",
+            **theme_of(default_genre),
         ),
         encoding="utf-8",
     )
@@ -92,6 +104,7 @@ def main() -> None:
             asset_prefix="",
             canonical_path="privacy.html",
             current_genre_slug="",
+            **theme_of(default_genre),
         ),
         encoding="utf-8",
     )
@@ -109,6 +122,7 @@ def main() -> None:
                 asset_prefix="",
                 canonical_path=f"{genre['slug']}.html",
                 current_genre_slug=genre["slug"],
+                **theme_of(genre),
             ),
             encoding="utf-8",
         )
@@ -120,6 +134,7 @@ def main() -> None:
             for pid in article.get("recommended_product_ids", [])
             if pid in products_by_id
         ]
+        article_genre = genre_by_name.get(article.get("genre"), default_genre)
         out_path = DOCS_DIR / "articles" / f"{article['slug']}.html"
         out_path.write_text(
             article_tpl.render(
@@ -131,6 +146,7 @@ def main() -> None:
                 asset_prefix="../",
                 canonical_path=f"articles/{article['slug']}.html",
                 current_genre_slug=slug_by_genre_name.get(article.get("genre"), ""),
+                **theme_of(article_genre),
             ),
             encoding="utf-8",
         )

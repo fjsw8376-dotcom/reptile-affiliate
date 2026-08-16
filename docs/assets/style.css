@@ -12,6 +12,11 @@
   --color-terracotta-dark: #a4502b;
   --font-heading: Georgia, "Hiragino Mincho ProN", "Yu Mincho", serif;
   --font-body: "Hiragino Sans", "Yu Gothic", sans-serif;
+
+  /* ページごとに body 要素のインラインstyleで上書きされる（現在のジャンルの色） */
+  --theme-color: var(--color-forest);
+  --theme-color-dark: var(--color-forest-dark);
+  --theme-color-light: #e5eee1;
 }
 
 * { box-sizing: border-box; }
@@ -34,10 +39,11 @@ a { color: inherit; }
 .site-header {
   padding: 2.6rem 1.5rem 2rem;
   text-align: center;
-  background: linear-gradient(180deg, var(--color-forest-dark) 0%, var(--color-forest) 100%);
+  background: linear-gradient(180deg, var(--theme-color-dark) 0%, var(--theme-color) 100%);
   color: #f3efe1;
   position: relative;
   overflow: hidden;
+  transition: background 0.2s ease;
 }
 
 .site-header::after {
@@ -68,36 +74,47 @@ a { color: inherit; }
 }
 
 .site-tagline {
-  color: #cddac2;
+  color: #e8f0e4;
   margin-top: 0.5rem;
   font-size: 0.95rem;
+  opacity: 0.9;
 }
+
+/* ---------- Genre nav (tab/button style) ---------- */
 
 .genre-nav {
   display: flex;
   justify-content: center;
   flex-wrap: wrap;
-  gap: 0.5rem;
-  margin-top: 1.2rem;
+  gap: 0.55rem;
+  margin-top: 1.3rem;
 }
 
 .genre-pill {
-  display: inline-block;
-  padding: 0.4rem 1rem;
+  --pill-color: #f3efe1;
+  display: inline-flex;
+  align-items: center;
+  gap: 0.35rem;
+  padding: 0.5rem 1.1rem;
   border-radius: 999px;
-  border: 1px solid rgba(243, 239, 225, 0.35);
-  color: #f3efe1;
+  border: 1.5px solid var(--pill-color);
+  background: rgba(255, 255, 255, 0.1);
+  color: #fff;
   text-decoration: none;
-  font-size: 0.88rem;
-  transition: background 0.15s ease;
+  font-size: 0.9rem;
+  font-weight: 600;
+  transition: all 0.15s ease;
 }
 
-.genre-pill:hover { background: rgba(243, 239, 225, 0.12); }
+.genre-pill:hover {
+  background: rgba(255, 255, 255, 0.22);
+  transform: translateY(-1px);
+}
 
 .genre-pill.active {
-  background: var(--color-terracotta);
-  border-color: var(--color-terracotta);
-  font-weight: bold;
+  background: var(--pill-color);
+  border-color: var(--pill-color);
+  box-shadow: 0 3px 10px rgba(0, 0, 0, 0.25);
 }
 
 /* ---------- Layout ---------- */
@@ -108,25 +125,15 @@ a { color: inherit; }
   padding: 2.4rem 1.5rem 3rem;
 }
 
-/* ---------- Hero (index only) ---------- */
+/* ---------- Hero ---------- */
 
 .hero {
   background: var(--color-card-bg);
   border: 1px solid var(--color-border);
+  border-top: 4px solid var(--theme-color);
   border-radius: 14px;
   padding: 1.6rem 1.8rem;
   margin-bottom: 2rem;
-  position: relative;
-}
-
-.hero::before {
-  content: "🦎";
-  position: absolute;
-  top: -14px;
-  right: 18px;
-  font-size: 1.6rem;
-  background: var(--color-bg);
-  padding: 0 0.3rem;
 }
 
 .hero p {
@@ -135,7 +142,7 @@ a { color: inherit; }
   font-size: 0.96rem;
 }
 
-.hero strong { color: var(--color-forest-dark); }
+.hero strong { color: var(--theme-color-dark); }
 
 /* ---------- Genre cards (index) ---------- */
 
@@ -147,24 +154,39 @@ a { color: inherit; }
 }
 
 .genre-card {
+  --card-color: var(--color-moss);
+  --card-color-light: var(--color-bg-alt);
   display: block;
   background: var(--color-card-bg);
   border: 1px solid var(--color-border);
+  border-top: 5px solid var(--card-color);
   border-radius: 12px;
-  padding: 1.2rem 1.3rem;
+  padding: 1.3rem 1.3rem 1.4rem;
   text-decoration: none;
   transition: box-shadow 0.15s ease, transform 0.15s ease;
 }
 
 .genre-card:hover {
-  box-shadow: 0 6px 18px rgba(53, 86, 63, 0.12);
-  transform: translateY(-1px);
+  box-shadow: 0 8px 20px rgba(0, 0, 0, 0.1);
+  transform: translateY(-2px);
+}
+
+.genre-card-icon {
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+  width: 44px;
+  height: 44px;
+  border-radius: 50%;
+  background: var(--card-color-light);
+  font-size: 1.4rem;
+  margin-bottom: 0.7rem;
 }
 
 .genre-card h2 {
   font-family: var(--font-heading);
   font-size: 1.1rem;
-  color: var(--color-forest-dark);
+  color: var(--color-text);
   margin: 0 0 0.4rem;
 }
 
@@ -174,26 +196,44 @@ a { color: inherit; }
   margin: 0;
 }
 
+/* ---------- Badges ---------- */
+
 .genre-badge {
-  display: inline-block;
+  --badge-color: var(--color-forest-dark);
+  --badge-color-light: #e5eee1;
+  display: inline-flex;
+  align-items: center;
+  gap: 0.25rem;
   font-size: 0.72rem;
   font-weight: bold;
-  padding: 0.15rem 0.6rem;
+  padding: 0.18rem 0.65rem;
   border-radius: 999px;
-  letter-spacing: 0.03em;
-  background: var(--color-forest-dark);
-  color: #f3efe1;
+  letter-spacing: 0.02em;
+  background: var(--badge-color-light);
+  color: var(--badge-color);
 }
 
-.card-badges { display: flex; gap: 0.4rem; margin-bottom: 0.4rem; }
+.card-badges { display: flex; flex-wrap: wrap; gap: 0.4rem; margin-bottom: 0.5rem; }
 
-/* ---------- Article cards (index) ---------- */
+.format-badge {
+  display: inline-block;
+  font-size: 0.72rem;
+  font-weight: 600;
+  padding: 0.18rem 0.65rem;
+  border-radius: 999px;
+  letter-spacing: 0.02em;
+  background: transparent;
+  color: var(--color-muted);
+  border: 1px solid var(--color-border);
+}
+
+/* ---------- Article cards ---------- */
 
 .article-list h1 {
   font-family: var(--font-heading);
   font-size: 1.4rem;
-  color: var(--color-forest-dark);
-  border-bottom: 2px solid var(--color-moss);
+  color: var(--theme-color-dark);
+  border-bottom: 2px solid var(--theme-color);
   padding-bottom: 0.5rem;
   margin-bottom: 1.4rem;
 }
@@ -208,28 +248,16 @@ a { color: inherit; }
 }
 
 .article-card:hover {
-  box-shadow: 0 6px 18px rgba(53, 86, 63, 0.12);
+  box-shadow: 0 6px 18px rgba(0, 0, 0, 0.1);
   transform: translateY(-1px);
 }
 
 .article-card h2 { margin: 0.2rem 0 0.4rem; font-size: 1.12rem; line-height: 1.5; }
 .article-card a { text-decoration: none; }
-.article-card a:hover { color: var(--color-forest); }
+.article-card a:hover { color: var(--theme-color); }
 
 .article-date, .faq-q { color: var(--color-muted); font-size: 0.85rem; }
 .article-excerpt { color: var(--color-muted); font-size: 0.92rem; margin: 0.3rem 0 0; }
-
-.format-badge {
-  display: inline-block;
-  font-size: 0.72rem;
-  font-weight: bold;
-  padding: 0.15rem 0.6rem;
-  border-radius: 999px;
-  letter-spacing: 0.03em;
-}
-
-.format-badge.guide { background: #e5eee1; color: var(--color-forest-dark); }
-.format-badge.comparison { background: #f5e2d6; color: var(--color-terracotta-dark); }
 
 /* ---------- Article body ---------- */
 
@@ -237,11 +265,11 @@ a { color: inherit; }
   font-family: var(--font-heading);
   font-size: 1.55rem;
   margin: 0.6rem 0 1rem;
-  color: var(--color-forest-dark);
+  color: var(--theme-color-dark);
   line-height: 1.5;
 }
 
-.article-meta { display: flex; align-items: center; gap: 0.6rem; margin-bottom: 0.3rem; }
+.article-meta { display: flex; align-items: center; gap: 0.6rem; margin-bottom: 0.3rem; flex-wrap: wrap; }
 
 .lead { font-size: 1.02rem; }
 
@@ -250,8 +278,8 @@ a { color: inherit; }
 .article-section h2 {
   font-family: var(--font-heading);
   font-size: 1.2rem;
-  color: var(--color-forest-dark);
-  border-left: 5px solid var(--color-moss);
+  color: var(--theme-color-dark);
+  border-left: 5px solid var(--theme-color);
   padding-left: 0.7rem;
 }
 
@@ -276,7 +304,7 @@ a { color: inherit; }
 .product-recommend h2 {
   font-family: var(--font-heading);
   font-size: 1.15rem;
-  color: var(--color-forest-dark);
+  color: var(--theme-color-dark);
   margin-top: 0;
 }
 
@@ -304,16 +332,17 @@ a { color: inherit; }
 
 .product-link {
   display: inline-block;
-  background: var(--color-terracotta);
+  background: var(--theme-color);
   color: #fff;
-  padding: 0.45rem 1.1rem;
+  padding: 0.5rem 1.2rem;
   border-radius: 6px;
   text-decoration: none;
   font-size: 0.9rem;
   font-weight: bold;
+  transition: background 0.15s ease;
 }
 
-.product-link:hover { background: var(--color-terracotta-dark); }
+.product-link:hover { background: var(--theme-color-dark); }
 
 /* ---------- FAQ ---------- */
 
@@ -321,13 +350,14 @@ a { color: inherit; }
 .faq h2 {
   font-family: var(--font-heading);
   font-size: 1.15rem;
-  color: var(--color-forest-dark);
+  color: var(--theme-color-dark);
 }
 .faq-item {
   margin-bottom: 1rem;
   padding: 0.9rem 1.1rem;
   background: var(--color-bg-alt);
   border-radius: 10px;
+  border-left: 3px solid var(--theme-color);
 }
 .faq-a { margin-top: 0.3rem; }
 
