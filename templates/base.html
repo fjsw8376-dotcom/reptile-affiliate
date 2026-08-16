@@ -33,6 +33,12 @@
     <span class="site-title">{{ site.site_name }}</span>
   </a>
   <p class="site-tagline">{{ site.tagline }}</p>
+  <nav class="genre-nav">
+    <a class="genre-pill{{ ' active' if not current_genre_slug else '' }}" href="{{ root_prefix }}index.html">すべて</a>
+    {% for g in site.genres %}
+    <a class="genre-pill{{ ' active' if current_genre_slug == g.slug else '' }}" href="{{ root_prefix }}{{ g.slug }}.html">{{ g.name }}</a>
+    {% endfor %}
+  </nav>
 </header>
 
 <main class="site-main">

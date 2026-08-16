@@ -1,4 +1,5 @@
-"""Claude APIで爬虫類グッズ紹介記事を自動生成し articles/ に保存する。
+"""Claude APIでテラリウム系生体（爬虫類・両生類・昆虫/クモ類）の
+グッズ紹介記事を自動生成し articles/ に保存する。
 
 GitHub Actionsから毎週実行される想定。topics_state.json のインデックスを
 進めながら topics.json を順番に消化する。1回の実行で site_config.json の
@@ -20,13 +21,15 @@ ARTICLES_DIR = ROOT / "articles"
 
 MODEL = "claude-sonnet-5"
 
-SYSTEM_PROMPT = """あなたは日本の爬虫類飼育情報サイトの専属ライターです。
+SYSTEM_PROMPT = """あなたは日本のテラリウム系ペット飼育情報サイトの専属ライターです。
+爬虫類・両生類・昆虫/クモ類（クワガタ、カブトムシ、タランチュラ等）を対象に、
 初心者〜中級者の飼育者に向けて、信頼できる一般的な飼育知識を分かりやすく伝える記事を書きます。
 
 厳守事項:
+- 記事は指定されたジャンル（爬虫類／両生類／昆虫・クモ類）の生体に関する内容に限定する。他ジャンルの生体を混同しない
 - 事実に基づかない断定（治療効果・寿命の保証など）は書かない
 - 商品の価格や詳細スペックの具体的な数字は書かない（変動するため。名前と用途の説明にとどめる）
-- 個体の健康に関わる内容は「専門の動物病院に相談を」という趣旨を自然に含める
+- 個体の健康に関わる内容は「専門の動物病院・ショップに相談を」という趣旨を自然に含める
 - 見出し・本文は自然なSEOを意識するが、キーワードの不自然な連呼はしない
 - 断定できない情報は「一般的には」「〜と言われています」等、表現を和らげる
 - 本文はHTMLの断片（h2は使わず、pやul/li、strongなどのタグのみ）で書く。h1やhtml/head/bodyタグは書かない
@@ -127,6 +130,7 @@ def build_user_prompt(topic: dict, candidate_products: list[dict]) -> str:
 
     return f"""以下のテーマで記事を1本作成し、submit_article ツールで提出してください。
 
+対象ジャンル: {topic.get('genre', '爬虫類')}
 テーマ: {topic['topic']}
 
 {format_instructions}
@@ -154,7 +158,12 @@ def validate_article(article: dict) -> None:
 def generate_one(
     client: anthropic.Anthropic, topic: dict, products: list[dict], max_attempts: int = 3
 ) -> dict:
-    candidates = [p for p in products if p["category"] in topic.get("related_categories", [])]
+    genre = topic.get("genre", "爬虫類")
+    candidates = [
+        p
+        for p in products
+        if p["category"] in topic.get("related_categories", []) and genre in p.get("genre", [])
+    ]
 
     last_error: Exception | None = None
     for attempt in range(1, max_attempts + 1):
@@ -212,6 +221,7 @@ def main() -> None:
         article["generated_at"] = now_iso
         article["source_topic"] = topic["topic"]
         article["format"] = topic.get("format", "guide")
+        article["genre"] = topic.get("genre", "爬虫類")
 
         out_path = ARTICLES_DIR / f"{today}-{article['slug']}.json"
         save_json(out_path, article)

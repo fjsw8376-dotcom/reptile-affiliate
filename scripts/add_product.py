@@ -30,12 +30,23 @@ def load_categories() -> list[str]:
     return sorted(categories)
 
 
+def load_genres() -> list[str]:
+    topics = json.loads(TOPICS_PATH.read_text(encoding="utf-8"))
+    genres: set[str] = set()
+    for t in topics:
+        if "genre" in t:
+            genres.add(t["genre"])
+    return sorted(genres)
+
+
 def main() -> None:
     products = json.loads(PRODUCTS_PATH.read_text(encoding="utf-8"))
     categories = load_categories()
+    genres = load_genres()
 
     print("=== 商品追加 ===")
     print(f"登録済みカテゴリ例: {', '.join(categories)}")
+    print(f"登録済みジャンル例: {', '.join(genres)}")
 
     url = input("AmazonのURL（商品ページ）: ").strip()
     asin = extract_asin(url)
@@ -48,6 +59,10 @@ def main() -> None:
 
     name = input("商品名: ").strip()
     category = input(f"カテゴリ（{'/'.join(categories)}）: ").strip()
+    genre_input = input(
+        f"対象ジャンル（{'/'.join(genres)}、複数可・カンマ区切り）: "
+    ).strip()
+    genre_list = [g.strip() for g in genre_input.split(",") if g.strip()]
     notes = input("補足メモ（商品の特徴・おすすめポイント。価格は書かない）: ").strip()
     image_url = input(
         "商品画像URL（SiteStripeで取得したもの。任意・空欄でスキップ可）: "
@@ -58,6 +73,7 @@ def main() -> None:
         "asin": asin,
         "name": name,
         "category": category,
+        "genre": genre_list,
         "notes": notes,
     }
     if image_url:

@@ -1,8 +1,25 @@
 {
-  "site_name": "爬虫類生活ラボ",
-  "tagline": "初心者のための爬虫類飼育グッズ情報",
+  "site_name": "テラリウム生活ラボ",
+  "tagline": "爬虫類・両生類・昆虫のかんたん飼育ガイド",
   "base_url": "https://fjsw8376-dotcom.github.io/reptile-affiliate/",
   "amazon_tracking_tag": "sonaegirl-22",
   "articles_per_run": 2,
-  "language": "ja"
+  "language": "ja",
+  "genres": [
+    {
+      "slug": "reptiles",
+      "name": "爬虫類",
+      "tagline": "ケージ・保温器具・紫外線ライトの選び方とおすすめグッズ"
+    },
+    {
+      "slug": "amphibians",
+      "name": "両生類",
+      "tagline": "カエル・イモリなど多湿を好む種の飼育グッズ"
+    },
+    {
+      "slug": "insects",
+      "name": "昆虫・クモ類",
+      "tagline": "クワガタ・カブトムシ・タランチュラの飼育グッズ"
+    }
+  ]
 }

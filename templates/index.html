@@ -1,6 +1,7 @@
 {% extends "base.html" %}
+{% from "_article_card.html" import article_card %}
 {% block title %}{{ site.site_name }} | {{ site.tagline }}{% endblock %}
-{% block meta_description %}{{ site.tagline }}。初心者向けの爬虫類飼育グッズ・お世話の基本をまとめています。{% endblock %}
+{% block meta_description %}{{ site.tagline }}。爬虫類・両生類・昆虫の飼育グッズの選び方をまとめています。{% endblock %}
 {% block og_title %}{{ site.site_name }}{% endblock %}
 {% block og_description %}{{ site.tagline }}{% endblock %}
 
@@ -18,18 +19,22 @@
 
 {% block content %}
 <section class="hero">
-  <p><strong>{{ site.site_name }}</strong>は、爬虫類をこれから迎える方・飼い始めたばかりの方向けに、ケージ・保温器具・床材などの選び方とおすすめグッズを紹介するサイトです。毎週更新しています。</p>
+  <p><strong>{{ site.site_name }}</strong>は、テラリウムで飼う生きもの（爬虫類・両生類・昆虫/クモ類）をこれから迎える方・飼い始めたばかりの方向けに、ケージ・保温器具・床材などの選び方とおすすめグッズを紹介するサイトです。上のタブから気になるジャンルを選べます。毎週更新しています。</p>
+</section>
+
+<section class="genre-cards">
+  {% for g in site.genres %}
+  <a class="genre-card" href="{{ g.slug }}.html">
+    <h2>{{ g.name }}</h2>
+    <p>{{ g.tagline }}</p>
+  </a>
+  {% endfor %}
 </section>
 
 <section class="article-list">
   <h1>最新記事</h1>
   {% for article in articles %}
-  <article class="article-card">
-    <span class="format-badge {{ article.format }}">{{ "比較・おすすめ" if article.format == "comparison" else "選び方ガイド" }}</span>
-    <h2><a href="articles/{{ article.slug }}.html">{{ article.title }}</a></h2>
-    <p class="article-date">{{ article.published_date }}</p>
-    <p class="article-excerpt">{{ article.meta_description }}</p>
-  </article>
+  {{ article_card(article, "") }}
   {% else %}
   <p>準備中です。まもなく記事が公開されます。</p>
   {% endfor %}

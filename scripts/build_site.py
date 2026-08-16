@@ -38,6 +38,7 @@ def load_articles() -> list[dict]:
         if not is_valid_article(article):
             print(f"警告: {path.name} の形式が不正なためスキップします")
             continue
+        article.setdefault("genre", "爬虫類")
         articles.append(article)
     articles.sort(key=lambda a: a["published_date"], reverse=True)
     return articles
@@ -48,6 +49,8 @@ def main() -> None:
     products = load_json(PRODUCTS_PATH)
     products_by_id = {p["id"]: p for p in products}
     articles = load_articles()
+    genres = site.get("genres", [])
+    slug_by_genre_name = {g["name"]: g["slug"] for g in genres}
 
     env = Environment(loader=FileSystemLoader(str(TEMPLATES_DIR)))
     env.filters["tojson"] = lambda v: json.dumps(v, ensure_ascii=False)
@@ -75,6 +78,7 @@ def main() -> None:
             root_prefix="",
             asset_prefix="",
             canonical_path="",
+            current_genre_slug="",
         ),
         encoding="utf-8",
     )
@@ -87,9 +91,27 @@ def main() -> None:
             root_prefix="",
             asset_prefix="",
             canonical_path="privacy.html",
+            current_genre_slug="",
         ),
         encoding="utf-8",
     )
+
+    category_tpl = env.get_template("category.html")
+    for genre in genres:
+        genre_articles = [a for a in articles if a.get("genre") == genre["name"]]
+        (DOCS_DIR / f"{genre['slug']}.html").write_text(
+            category_tpl.render(
+                site=site,
+                genre=genre,
+                articles=genre_articles,
+                current_year=current_year,
+                root_prefix="",
+                asset_prefix="",
+                canonical_path=f"{genre['slug']}.html",
+                current_genre_slug=genre["slug"],
+            ),
+            encoding="utf-8",
+        )
 
     article_tpl = env.get_template("article.html")
     for article in articles:
@@ -108,6 +130,7 @@ def main() -> None:
                 root_prefix="../",
                 asset_prefix="../",
                 canonical_path=f"articles/{article['slug']}.html",
+                current_genre_slug=slug_by_genre_name.get(article.get("genre"), ""),
             ),
             encoding="utf-8",
         )
@@ -115,12 +138,14 @@ def main() -> None:
     write_sitemap(site, articles)
     write_robots_txt(site)
 
-    print(f"生成完了: 記事 {len(articles)} 件 -> {DOCS_DIR}")
+    print(f"生成完了: 記事 {len(articles)} 件、ジャンル {len(genres)} 件 -> {DOCS_DIR}")
 
 
 def write_sitemap(site: dict, articles: list[dict]) -> None:
     base_url = site["base_url"]
     urls = [(f"{base_url}", None), (f"{base_url}privacy.html", None)]
+    for genre in site.get("genres", []):
+        urls.append((f"{base_url}{genre['slug']}.html", None))
     for article in articles:
         urls.append((f"{base_url}articles/{article['slug']}.html", article["published_date"]))
 

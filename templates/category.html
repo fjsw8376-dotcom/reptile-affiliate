@@ -1,0 +1,33 @@
+{% extends "base.html" %}
+{% from "_article_card.html" import article_card %}
+{% block title %}{{ genre.name }}の飼育グッズ情報 | {{ site.site_name }}{% endblock %}
+{% block meta_description %}{{ genre.tagline }}。{{ genre.name }}の初心者向けに、ケージ・保温器具・床材などの選び方とおすすめグッズを紹介します。{% endblock %}
+{% block og_title %}{{ genre.name }}の飼育グッズ情報 | {{ site.site_name }}{% endblock %}
+{% block og_description %}{{ genre.tagline }}{% endblock %}
+
+{% block structured_data %}
+<script type="application/ld+json">
+{
+  "@context": "https://schema.org",
+  "@type": "CollectionPage",
+  "name": "{{ genre.name }}の飼育グッズ情報",
+  "description": "{{ genre.tagline }}",
+  "url": "{{ site.base_url }}{{ canonical_path }}"
+}
+</script>
+{% endblock %}
+
+{% block content %}
+<section class="hero">
+  <p><strong>{{ genre.name }}</strong>の飼育グッズ情報です。{{ genre.tagline }}</p>
+</section>
+
+<section class="article-list">
+  <h1>{{ genre.name }}の記事一覧</h1>
+  {% for article in articles %}
+  {{ article_card(article, "") }}
+  {% else %}
+  <p>準備中です。まもなく{{ genre.name }}の記事が公開されます。</p>
+  {% endfor %}
+</section>
+{% endblock %}

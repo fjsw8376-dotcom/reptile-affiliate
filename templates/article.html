@@ -31,6 +31,7 @@
 {% block content %}
 <article class="article-body">
   <div class="article-meta">
+    <span class="genre-badge">{{ article.genre }}</span>
     <span class="format-badge {{ article.format }}">{{ "比較・おすすめ" if article.format == "comparison" else "選び方ガイド" }}</span>
     <span class="article-date">{{ article.published_date }}</span>
   </div>
@@ -85,7 +86,7 @@
   {% endif %}
 
   <p class="health-disclaimer">
-    本記事は一般的な飼育情報の紹介です。個体の健康状態に関わる判断は、必ず爬虫類を診療できる動物病院にご相談ください。
+    本記事は一般的な飼育情報の紹介です。個体の健康状態に関わる判断は、必ず{{ article.genre }}を診療・取り扱いできる専門店・動物病院にご相談ください。
   </p>
 </article>
 {% endblock %}
