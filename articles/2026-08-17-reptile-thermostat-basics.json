@@ -52,5 +52,12 @@
   "generated_at": "2026-08-17T00:45:14.068397+00:00",
   "source_topic": "サーモスタットはなぜ必要か。選び方の基本",
   "format": "guide",
-  "genre": "爬虫類"
+  "genre": "爬虫類",
+  "species_image": {
+    "url": "https://upload.wikimedia.org/wikipedia/commons/7/7f/Eublepharis_macularius_2009_G6.jpg",
+    "caption": "ヒョウモントカゲモドキ（イメージ）",
+    "author": "George Chernilevsky",
+    "license": "Public Domain",
+    "source_url": "https://commons.wikimedia.org/wiki/File:Eublepharis_macularius_2009_G6.jpg"
+  }
 }

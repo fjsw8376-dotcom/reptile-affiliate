@@ -198,10 +198,22 @@ def generate_one(
     raise RuntimeError(f"{max_attempts}回試行しましたが有効な記事を生成できませんでした: {last_error}")
 
 
-def find_species_image(topic_text: str, species_images: dict) -> dict | None:
+# テーマに種名が含まれない一般記事（ライトの選び方、床材の選び方など）でも
+# 記事に写真が入るよう、ジャンルごとの代表種にフォールバックする
+GENRE_DEFAULT_SPECIES = {
+    "爬虫類": "ヒョウモントカゲモドキ",
+    "両生類": "パックマンガエル",
+    "昆虫・クモ類": "カブトムシ",
+}
+
+
+def find_species_image(topic_text: str, genre: str, species_images: dict) -> dict | None:
     for keyword, image in species_images.items():
         if keyword in topic_text:
             return image
+    default_species = GENRE_DEFAULT_SPECIES.get(genre)
+    if default_species:
+        return species_images.get(default_species)
     return None
 
 
@@ -231,7 +243,7 @@ def main() -> None:
         article["source_topic"] = topic["topic"]
         article["format"] = topic.get("format", "guide")
         article["genre"] = topic.get("genre", "爬虫類")
-        species_image = find_species_image(topic["topic"], species_images)
+        species_image = find_species_image(topic["topic"], article["genre"], species_images)
         if species_image:
             article["species_image"] = species_image
 

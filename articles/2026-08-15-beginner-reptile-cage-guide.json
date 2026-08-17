@@ -52,5 +52,12 @@
   "generated_at": "2026-08-15T06:00:52.462093+00:00",
   "source_topic": "初心者向け爬虫類ケージの選び方",
   "format": "guide",
-  "genre": "爬虫類"
+  "genre": "爬虫類",
+  "species_image": {
+    "url": "https://upload.wikimedia.org/wikipedia/commons/7/7f/Eublepharis_macularius_2009_G6.jpg",
+    "caption": "ヒョウモントカゲモドキ（イメージ）",
+    "author": "George Chernilevsky",
+    "license": "Public Domain",
+    "source_url": "https://commons.wikimedia.org/wiki/File:Eublepharis_macularius_2009_G6.jpg"
+  }
 }
