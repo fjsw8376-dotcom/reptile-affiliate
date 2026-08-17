@@ -17,6 +17,7 @@ SITE_CONFIG_PATH = ROOT / "site_config.json"
 TOPICS_PATH = ROOT / "topics.json"
 STATE_PATH = ROOT / "topics_state.json"
 PRODUCTS_PATH = ROOT / "products.json"
+SPECIES_IMAGES_PATH = ROOT / "species_images.json"
 ARTICLES_DIR = ROOT / "articles"
 
 MODEL = "claude-sonnet-5"
@@ -197,11 +198,19 @@ def generate_one(
     raise RuntimeError(f"{max_attempts}回試行しましたが有効な記事を生成できませんでした: {last_error}")
 
 
+def find_species_image(topic_text: str, species_images: dict) -> dict | None:
+    for keyword, image in species_images.items():
+        if keyword in topic_text:
+            return image
+    return None
+
+
 def main() -> None:
     config = load_json(SITE_CONFIG_PATH)
     topics = load_json(TOPICS_PATH)
     state = load_json(STATE_PATH)
     products = load_json(PRODUCTS_PATH)
+    species_images = load_json(SPECIES_IMAGES_PATH) if SPECIES_IMAGES_PATH.exists() else {}
 
     client = anthropic.Anthropic()
 
@@ -222,6 +231,9 @@ def main() -> None:
         article["source_topic"] = topic["topic"]
         article["format"] = topic.get("format", "guide")
         article["genre"] = topic.get("genre", "爬虫類")
+        species_image = find_species_image(topic["topic"], species_images)
+        if species_image:
+            article["species_image"] = species_image
 
         out_path = ARTICLES_DIR / f"{today}-{article['slug']}.json"
         save_json(out_path, article)

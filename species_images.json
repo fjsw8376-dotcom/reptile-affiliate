@@ -1,0 +1,72 @@
+{
+  "ヒョウモントカゲモドキ": {
+    "url": "https://upload.wikimedia.org/wikipedia/commons/7/7f/Eublepharis_macularius_2009_G6.jpg",
+    "caption": "ヒョウモントカゲモドキ（イメージ）",
+    "author": "George Chernilevsky",
+    "license": "Public Domain",
+    "source_url": "https://commons.wikimedia.org/wiki/File:Eublepharis_macularius_2009_G6.jpg"
+  },
+  "フトアゴヒゲトカゲ": {
+    "url": "https://upload.wikimedia.org/wikipedia/commons/e/ec/Pogona_vitticeps_close-up_2009_G3.jpg",
+    "caption": "フトアゴヒゲトカゲ（イメージ）",
+    "author": "George Chernilevsky",
+    "license": "Public Domain",
+    "source_url": "https://commons.wikimedia.org/wiki/File:Pogona_vitticeps_close-up_2009_G3.jpg"
+  },
+  "ヘビ": {
+    "url": "https://upload.wikimedia.org/wikipedia/commons/c/cd/Corn_snake_%287729624142%29.jpg",
+    "caption": "コーンスネーク（イメージ）",
+    "author": "USFWS Southeast",
+    "license": "CC BY 2.0",
+    "source_url": "https://commons.wikimedia.org/wiki/File:Corn_snake_(7729624142).jpg"
+  },
+  "カメ": {
+    "url": "https://upload.wikimedia.org/wikipedia/commons/e/e0/Red-Eared_Slider_-_Turtle.JPG",
+    "caption": "ミシシッピアカミミガメ（イメージ）",
+    "author": "19901996gsg",
+    "license": "CC BY-SA 4.0",
+    "source_url": "https://commons.wikimedia.org/wiki/File:Red-Eared_Slider_-_Turtle.JPG"
+  },
+  "パックマンガエル": {
+    "url": "https://upload.wikimedia.org/wikipedia/commons/0/07/Ceratophrys_ornata_%28Pacman_Frog%29.JPG",
+    "caption": "パックマンガエル（イメージ）",
+    "author": "Grosscha",
+    "license": "CC BY-SA 3.0",
+    "source_url": "https://commons.wikimedia.org/wiki/File:Ceratophrys_ornata_(Pacman_Frog).JPG"
+  },
+  "アカハライモリ": {
+    "url": "https://upload.wikimedia.org/wikipedia/commons/0/03/Cynops_pyrrhogaster.jpg",
+    "caption": "アカハライモリ（イメージ）",
+    "author": "OpenCage",
+    "license": "CC BY-SA 2.5",
+    "source_url": "https://commons.wikimedia.org/wiki/File:Cynops_pyrrhogaster.jpg"
+  },
+  "ウーパールーパー": {
+    "url": "https://upload.wikimedia.org/wikipedia/commons/e/ef/Axolotl_Ambystoma_mexicanum_Aquarium_Zoo_Berlin%2C_2007.jpg",
+    "caption": "ウーパールーパー（イメージ）",
+    "author": "Kristof Magnusson",
+    "license": "CC BY-SA 4.0",
+    "source_url": "https://commons.wikimedia.org/wiki/File:Axolotl_Ambystoma_mexicanum_Aquarium_Zoo_Berlin,_2007.jpg"
+  },
+  "カブトムシ": {
+    "url": "https://upload.wikimedia.org/wikipedia/commons/d/df/Trypoxylus_dichotomus.jpg",
+    "caption": "カブトムシ（イメージ）",
+    "author": "Andrew Butko",
+    "license": "CC BY-SA 3.0",
+    "source_url": "https://commons.wikimedia.org/wiki/File:Trypoxylus_dichotomus.jpg"
+  },
+  "クワガタ": {
+    "url": "https://upload.wikimedia.org/wikipedia/commons/5/58/Dorcus_rectus.jpg",
+    "caption": "コクワガタ（イメージ）",
+    "author": "takato marui",
+    "license": "CC BY-SA 2.0",
+    "source_url": "https://commons.wikimedia.org/wiki/File:Dorcus_rectus.jpg"
+  },
+  "タランチュラ": {
+    "url": "https://upload.wikimedia.org/wikipedia/commons/3/3f/Grammostola_pulchra.jpg",
+    "caption": "タランチュラ（イメージ）",
+    "author": "Stahlkocher",
+    "license": "CC BY-SA 3.0",
+    "source_url": "https://commons.wikimedia.org/wiki/File:Grammostola_pulchra.jpg"
+  }
+}

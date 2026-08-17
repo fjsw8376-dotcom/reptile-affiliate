@@ -10,6 +10,9 @@
 {% if recommended_products and recommended_products[0].image_url %}
 <meta property="og:image" content="{{ recommended_products[0].image_url }}">
 <meta name="twitter:card" content="summary_large_image">
+{% elif article.species_image %}
+<meta property="og:image" content="{{ article.species_image.url }}">
+<meta name="twitter:card" content="summary_large_image">
 {% endif %}
 {% endblock %}
 
@@ -37,6 +40,16 @@
   </div>
   <h1>{{ article.title }}</h1>
 
+  {% if article.species_image %}
+  <figure class="species-hero" style="--theme-color: {{ theme_color }};">
+    <img src="{{ article.species_image.url }}" alt="{{ article.species_image.caption }}" loading="lazy">
+    <figcaption>
+      {{ article.species_image.caption }} ／ 撮影: {{ article.species_image.author }}
+      （<a href="{{ article.species_image.source_url }}" target="_blank" rel="noopener">{{ article.species_image.license }}, Wikimedia Commons</a>）
+    </figcaption>
+  </figure>
+  {% endif %}
+
   <div class="lead">{{ article.intro_html | safe }}</div>
 
   {% for section in article.sections %}
@@ -53,6 +66,9 @@
     <ul class="product-list">
       {% for product in recommended_products %}
       <li class="product-item">
+        {% if loop.first and article.format == "comparison" %}
+        <span class="product-rank-badge" style="--badge-color: {{ theme_color }};">🏆 イチオシ</span>
+        {% endif %}
         <div class="product-item-inner">
           {% if product.image_url %}
           <a href="https://www.amazon.co.jp/dp/{{ product.asin }}?tag={{ site.amazon_tracking_tag }}" rel="nofollow sponsored" target="_blank" class="product-image-link">
@@ -63,7 +79,7 @@
             <p class="product-name">{{ product.name }}</p>
             {% if product.notes %}<p class="product-notes">{{ product.notes }}</p>{% endif %}
             <a class="product-link" href="https://www.amazon.co.jp/dp/{{ product.asin }}?tag={{ site.amazon_tracking_tag }}" rel="nofollow sponsored" target="_blank">
-              Amazonで見る
+              Amazonで詳細を見る →
             </a>
           </div>
         </div>
